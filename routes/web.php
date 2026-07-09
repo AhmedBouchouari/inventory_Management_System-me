@@ -75,9 +75,7 @@ Route::post('/insert-new-order',[OrderController::class,'newStore'])->middleware
 Route::get('/add-customer', function () {
     return view('Admin.add_customer');
 })->middleware(['auth'])->name('add.customer');
-
 Route::post('/insert-customer',[CustomerController::class,'store'])->middleware(['auth']);
-
 Route::get('/all-customers',[CustomerController::class,'customersData'])->middleware(['auth'])->name('all.customers');
 
 

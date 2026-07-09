@@ -85,7 +85,7 @@ class CustomerController extends Controller
         $customer->phone = $request->phone;
 
         $customer->save();
-        return Redirect()->route('add.customer');
+        return Redirect()->route('all.customers');
         
     }
 

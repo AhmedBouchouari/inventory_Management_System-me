@@ -26,7 +26,7 @@ class ProductController extends Controller
 
 
         $data->save();
-        return Redirect()->route('add.product');
+        return Redirect()->route('all.product');
     }
 
     public function allProduct(){
