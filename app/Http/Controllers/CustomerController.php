@@ -49,30 +49,25 @@ class CustomerController extends Controller
 //     }
     
 // }
+
 {
     public function index()
     {
-        $customer = new Customer();
-        $customer = $customer->get();
-        return view('dashbord.dashbord',[
-            'customer' =>$customer
-            ]);
-
+        // Cleaner, standard syntax to get all customers
+        $customers = Customer::all();
+        return view('dashbord.dashbord', compact('customers'));
     }
 
     public function edit($id)
     {
-        $customers = Customer::where('id' ,'=',$id)->get();
-     
-        return view('customer.edit_customer',compact('customers'));
-
+        // Changed to singular $customer to match your edit form view variables perfectly
+        $customer = Customer::findOrFail($id);     
+        return view('admin.edit_customer', compact('customer'));
     }
-
 
     public function create()
     {
         return view('customer.create');
-
     }
 
     public function store(Request $request)
@@ -85,61 +80,43 @@ class CustomerController extends Controller
         $customer->phone = $request->phone;
 
         $customer->save();
-        return Redirect()->route('all.customers');
-        
+        return redirect()->route('all.customers'); // Use lowercase helper function
     }
 
-    public function update($id,Request $request)
+    public function update($id, Request $request)
+{
+    $customer = Customer::findOrFail($id);
+
+    $customer->name = $request->name;
+    $customer->email = $request->email;
+    $customer->company = $request->company;
+    $customer->address = $request->address;
+    $customer->phone = $request->phone;
+
+    if ($request->filled('password')) {
+        $customer->password = bcrypt($request->password);
+    }
+
+    if ($customer->save()) {
+        return redirect()->route('all.customers');
+    } else {
+        return redirect()->route('all.customers');
+    }
+}
+
+    public function customersData()
     {
-       
-        $customer =  Customer::find($id);
-        $customer->name = $request->name;
-        $customer->email = $request->email;
-        $customer->password = $request->password;
-        $customer->gender = $request->gender;
-        if($request->is_active){
-            $customer->is_active = 1;
-
-        }
-      
-        $customer->date_of_birth = $request->date_of_birth;
-        $customer->roll = $request->roll;
-
-        if($customer->save())
-        {
-           
-            return redirect()->back()->with(['msg' => 1]);
-        }
-        else
-        {
-            return redirect()->back()->with(['msg' => 2]);
-        }
-     
-        return view('customer.edit',compact('customers'));
-
-    }
-
-        
-    public function customersData(){
         $customers = Customer::all();
-        return view('Admin.all_customers',compact('customers'));
+        return view('admin.all_customers', compact('customers')); // Keeps directory casing lowercase
     }
-         
-     
 
     public function delete($id)
     {
-        $customer =  Customer::find($id);
-        if($customer->delete())
-        {
-           
-            return redirect()->back()->with(['msg' => 1]);
+        $customer = Customer::findOrFail($id);
+        if($customer->delete()) {
+            return redirect()->back()->with('msg', 1);
+        } else {
+            return redirect()->back()->with('msg', 2);
         }
-        else
-        {
-            return redirect()->back()->with(['msg' => 2]);
-        }
-
     }
-
 }

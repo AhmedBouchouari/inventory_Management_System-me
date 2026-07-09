@@ -27,8 +27,7 @@
                                 <td>{{ $row->address }}</td>
                                 <td>{{ $row->phone }}</td>
                                 <td>
-                                    <a href="{{ URL::to('edit_customer') }}" class="btn btn-sm btn-info">Edit</a>
-                                    <!-- <a href="{{ 'add-order/' . $row->id }}" class="btn btn-sm btn-info">Order</a> -->
+                                    <a href="{{ route('edit.customer', $row->id) }}" class="btn btn-sm btn-info">Edit</a>
                                 </td>
                             </tr>
                         @endforeach
