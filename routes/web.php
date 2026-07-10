@@ -77,7 +77,8 @@ Route::get('/add-customer', function () {
 })->middleware(['auth'])->name('add.customer');
 Route::post('/insert-customer',[CustomerController::class,'store'])->middleware(['auth']);
 Route::get('/all-customers',[CustomerController::class,'customersData'])->middleware(['auth'])->name('all.customers');
-
+Route::get('/edit-customer/{id}', [CustomerController::class,'edit'])->middleware(['auth'])->name('edit.customer') ; // i added this route for edit customer
+Route::put('/update-customer/{id}', [CustomerController::class, 'update'])->name('update.customer');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
